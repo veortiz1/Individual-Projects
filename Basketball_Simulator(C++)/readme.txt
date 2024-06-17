@@ -1,1 +1,2 @@
 This is a basketball simulator, it runs based on random probabilites based on player ratings. In order to run it just put the teams.txt and simulator.cpp in same directory then just run the simulator file.
+Heres a youtube video for it SKIP TO 5:25 IF YOU ONLY WANT TO SEE CODE RUN EVERYTHING BEFORE THAT IS EXPLAINING THE PROBABLITIES BASED ON PLAYER RATING AND HOW IT APPLIES TO CODE https://www.youtube.com/watch?v=AiOrjKmGtxo
