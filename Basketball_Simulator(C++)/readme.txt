@@ -1,1 +1,1 @@
-This is a basketball simulator, it runs based on random probabilites based on player ratings.
+This is a basketball simulator, it runs based on random probabilites based on player ratings. In order to run it just put the teams.txt and simulator.cpp in same directory then just run the simulator file.
