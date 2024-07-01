@@ -1,1 +1,1 @@
-All projects are in python unless specified otherwise
+ALL FILES CONTAIN A README
