@@ -4,6 +4,5 @@ needed for this project. Then using these CSV files running my c++ program 'thre
 using whatever tool the user likes to graph data. I then wrote a report making graphs in apples Numbers application from the csvs I created in my program. 
 The report can be found here: https://docs.google.com/document/d/1cW2tbcQh1hqbSSOMRpZgcoMzNn4LySddFT18ydqbFOQ/edit
 How to run:
-1)Download all_data.zip (click on it then click view raw)
-2)Put threepoint.cpp and every individual file from all_data in same folder and open it in any IDE you prefer: VSCODE,VS,commandline, etc.
-3)Run threepoint.cpp it should work following steps 1 and 2.
+1)Put all contents of 'Do three point attempts correlate to winning in the modern Nba?' directory into a folder and then open the folder in IDE of choice.
+2)Run threepoint.cpp and it should work.
