@@ -6,6 +6,8 @@
 #include <sstream>
 #include <map>
 
+std::string finalstring = "";
+
 
 struct team
 {
@@ -29,20 +31,28 @@ public:
     {
         for (int i = 0; i < teams.size(); ++i)
         {
-            std::cout << teams[i].team_name << " " << teams[i].three_point_attempts_per_game << std::endl;
+            std::ostringstream append_to_final_string;
+            append_to_final_string << teams[i].team_name <<","<< teams[i].three_point_attempts_per_game<<std::endl;
+            finalstring=finalstring+append_to_final_string.str();
+
         }
     }
     void print_team(std::string tm)
     {
         for (int i = 0; i < teams.size(); ++i)
         {
+            
             if (tm == teams[i].team_name)
             {
-                std::cout << get_year() << " " << teams[i].three_point_attempts_per_game << " attempts per game" << std::endl;
+                std::ostringstream append_to_final_string;
+                append_to_final_string<< get_year() << "," << teams[i].three_point_attempts_per_game <<std::endl;
+                finalstring=finalstring+append_to_final_string.str();
                 return;
             }
         }
-        std::cout << "No attempts for the year" << get_year() << std::endl;
+        std::ostringstream append_to_final_string;
+        append_to_final_string<<get_year()<<0<<std::endl;
+        finalstring=finalstring+append_to_final_string.str();
     }
     void print_leauge_avg()
     {
@@ -51,9 +61,10 @@ public:
         {
             total = total + teams[i].three_point_attempts_per_game;
         }
-        std::cout << get_year() << " LEAUGE AVG 3PA: " << total / teams.size() << std::endl;
-        std::ofstream leauge_avg_file("leauge_avg.csv", std::ios::app);
-        leauge_avg_file << get_year() << "," << total / teams.size() << std::endl;
+        std::ostringstream append_to_final_string;
+        append_to_final_string<<get_year() << "," << total / teams.size() << std::endl;
+        finalstring=finalstring+append_to_final_string.str();
+        
     }
     int get_rank(std::string tm, std::string yr,int print)
     {
@@ -80,9 +91,11 @@ public:
             if (team_attempts == attempts[i])
             {
                 if(print==1){
-                std::cout << get_year() << " Champion " << tm << " Rank:" << i + 1 << std::endl;
-                std::ofstream champ_year("champions_rank.csv", std::ios::app);
-                champ_year << tm << "," << i + 1 << std::endl;
+                std::ostringstream append_to_final_string;
+                append_to_final_string<< get_year() << " Champion " << tm << " Rank:" << i + 1 << std::endl;
+                        finalstring=finalstring+append_to_final_string.str();
+
+                
                 }
                 return i + 1;
             }
@@ -238,7 +251,7 @@ public:
         if(get_year()<2015){
             return -1;
         }
-        std::ofstream writefile("team_tpa_2015_through_2024.csv", std::ios::app);
+        std::ofstream writefile("teamtpa.csv", std::ios::app);
         
         for(int i=0;i<teams.size();++i){
             if(teams[i].team_name==tm){
@@ -375,14 +388,14 @@ int main()
     while (exit == 0)
     {
         int option = 0; // this stores the user input;
-        std::cout << "Press 1 to View three point attempts by team per year" << std::endl;
+        std::cout << "Press 1 to View three point attempts by each team per year" << std::endl;
         std::cout << "Press 2 to View three point attempts by a individual team per year" << std::endl;
         std::cout << "Press 3 to View the leauge average by year" << std::endl;
         std::cout << "Press 4 to view the champions rank in 3pt attempts for that season" << std::endl;
-        std::cout << "Press 5 to view the amount of teams with a top 10 record that are also top 10 in three point attempts since 2014" << std::endl;
-        std::cout << "Press 6 to view the number of teams per playoff round top 10 in 3pt shooting" << std::endl;
-        std::cout << "Press 7 to view TPA by year for a particular team" << std::endl;
-        std::cout << "Press 8 to view average TPA for team per year since 2015" << std::endl;
+        std::cout << "Press 5 to view the amount of teams with a top 10 record that are also top 10 in three point attempts since 2015" << std::endl;
+        std::cout << "Press 6 to view the number of teams per playoff round top 10 in 3pt shooting since 2015" << std::endl;
+        std::cout << "Press 7 to view TPA by year for a particular team since 2015" << std::endl;
+        std::cout << "Press 8 to view average TPA for team since 2015" << std::endl;
 
 
 
@@ -399,6 +412,9 @@ int main()
                     all_seasons[i].print_stats();
                 }
             }
+            std::ofstream writefile("option_1.csv");
+            writefile<<finalstring;
+            finalstring="";
         }
         else if (option == 2) // gets a teams 3pt stats every year
         {
@@ -409,6 +425,9 @@ int main()
             {
                 all_seasons[i].print_team(team);
             }
+            std::ofstream writefile("option_2.csv");
+            writefile<<finalstring;
+            finalstring="";
         }
 
         else if (option == 3)
@@ -417,6 +436,9 @@ int main()
             {
                 all_seasons[i].print_leauge_avg();
             }
+            std::ofstream writefile("option_3.csv");
+            writefile<<finalstring;
+            finalstring="";
         }
         else if (option == 4)
         {
@@ -435,6 +457,10 @@ int main()
                     all_seasons[i].get_rank(delimited_result, yr,1);
                 }
             }
+            std::ofstream writefile("option_4.csv");
+            writefile<<finalstring;
+            finalstring="";
+
         }
         else if (option == 5)
         {
@@ -450,11 +476,17 @@ int main()
             }
             int temp_year=2015;
             for(int i = 0; i<teams_by_year.size();++i){
-               std::cout<<"Year: "<<temp_year<<" Number of teams with top 10 record in top 10 of tpa: "<<teams_by_year[i]<<std::endl;
-               std::ofstream teams_tpa("teams_with_top_10_record_and_top_10_tpa.csv", std::ios::app);
-               teams_tpa<<temp_year<<","<<teams_by_year[i]<<std::endl;
+              
+               std::ostringstream append_to_final_string;
+            append_to_final_string<<"Year: "<<temp_year<<" Number of teams with top 10 record in top 10 of tpa: "<<teams_by_year[i]<<std::endl;
+            finalstring=finalstring+append_to_final_string.str();
+
                temp_year=temp_year+1;
             }
+             std::ofstream writefile("option_5.csv");
+            writefile<<finalstring;
+            finalstring="";
+
         }
         else if (option==6){
             int round=0;
@@ -471,7 +503,12 @@ int main()
             }
             int year=2015;
             for(int i = 0;i<count.size();++i){
-                std::cout<<"Number of teams in top 10 tpa round 1 "<<count[i]<<" in the year "<<year<<std::endl;
+                std::ostringstream append_to_final_string;
+                append_to_final_string<<"Number of teams in top 10 tpa round 1 "<<count[i]<<" in the year "<<year<<std::endl;
+                finalstring=finalstring+append_to_final_string.str();
+                 std::ofstream writefile("option_6.csv");
+            writefile<<finalstring;
+               // std::cout<<"Number of teams in top 10 tpa round 1 "<<count[i]<<" in the year "<<year<<std::endl;
                 year=year+1;
             }
             }
@@ -484,7 +521,11 @@ int main()
             }
             int year=2015;
             for(int i = 0;i<count.size();++i){
-                std::cout<<"Number of teams in top 10 tpa round 2 "<<count[i]<<" in the year "<<year<<std::endl;
+                std::ostringstream append_to_final_string;
+                append_to_final_string<<"Number of teams in top 10 tpa round 2 "<<count[i]<<" in the year "<<year<<std::endl;
+                finalstring=finalstring+append_to_final_string.str();
+                 std::ofstream writefile("option_6.csv");
+            writefile<<finalstring;
                 year=year+1;
             }
             }
@@ -497,7 +538,11 @@ int main()
             }
             int year=2015;
             for(int i = 0;i<count.size();++i){
-                std::cout<<"Number of teams in top 10 tpa round 3 "<<count[i]<<" in the year "<<year<<std::endl;
+                std::ostringstream append_to_final_string;
+                append_to_final_string<<"Number of teams in top 10 tpa round 3 "<<count[i]<<" in the year "<<year<<std::endl;
+                finalstring=finalstring+append_to_final_string.str();
+                 std::ofstream writefile("option_6.csv");
+            writefile<<finalstring;
                 year=year+1;
             }
             }
@@ -511,11 +556,16 @@ int main()
             }
             int year=2015;
             for(int i = 0;i<count.size();++i){
-                std::cout<<"Number of teams in top 10 tpa round 4 "<<count[i]<<" in the year "<<year<<std::endl;
+                std::ostringstream append_to_final_string;
+                append_to_final_string<<"Number of teams in top 10 tpa round 4 "<<count[i]<<" in the year "<<year<<std::endl;
+                finalstring=finalstring+append_to_final_string.str();
+                 std::ofstream writefile("option_6.csv");
+            writefile<<finalstring;
                 year=year+1;
             }
             }
 
+            finalstring="";
 
         }
         else if(option==7){
@@ -530,11 +580,16 @@ int main()
                 }
             }
             int year=2015;
+            
             for(int i = 0;i<count.size();++i){
-                std::cout<<"TPA by "<<teamname<<" was "<<count[i]<<" in the year "<<year<<std::endl;
+                std::ostringstream append_to_final_string;
+                append_to_final_string<<"TPA by "<<teamname<<" was "<<count[i]<<" in the year "<<year<<std::endl;
+                finalstring=finalstring+append_to_final_string.str();
                 year=year+1;
             }
-
+            std::ofstream writefile("option_7.csv");
+            writefile<<finalstring;
+            finalstring="";
 
         }
         else if(option==8){
@@ -553,14 +608,19 @@ int main()
                 averages.push_back(counter);
 
                 }
-                std::ofstream writefile("average_threes_since_2015.csv", std::ios::app);
-                 
+                
                 for(int i = 0;i<nba_teams.size();++i){
-                std::cout<<"Since 2015 the "<<nba_teams[i]<<" have an average of "<<averages[i]<<" per year "<<std::endl;
-                writefile<<nba_teams[i]<<","<<averages[i]<<std::endl;
+                    std::ostringstream append_to_final_string;
+                append_to_final_string<<"Since 2015 the "<<nba_teams[i]<<" have an average of "<<averages[i]<<" per year "<<std::endl;
+                finalstring=finalstring+append_to_final_string.str();
+                //std::cout<<"Since 2015 the "<<nba_teams[i]<<" have an average of "<<averages[i]<<" per year "<<std::endl;
+                
                 }
+                std::ofstream writefile("option_8.csv");
+                writefile<<finalstring;
             
-            
+                finalstring="";
+
 
 
         }
